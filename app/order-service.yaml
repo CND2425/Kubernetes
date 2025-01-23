@@ -3,10 +3,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: product-service
+  name: order-service
+  namespace: ecommerce-app
 spec:
   selector:
-    app: product-service
+    app: order-service
   ports:
     - protocol: TCP
       port: 8080
@@ -17,22 +18,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-service
+  name: order-service
+  namespace: ecommerce-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: product-service
+      app: order-service
   template:
     metadata:
       labels:
-        app: product-service
+        app: order-service
     spec:
       containers:
-      - name: product-service
-        image: ghcr.io/cnd2425/product-service:latest
+      - name: order-service
+        image: ghcr.io/cnd2425/order-service:latest
         env:
           - name: MONGODB_URL
-            value: ""
+            value: "mongodb+srv://test:test@ecommerce.fgvr9.mongodb.net/store?retryWrites=true&w=majority&appName=ecommerce"
         ports:
         - containerPort: 8080

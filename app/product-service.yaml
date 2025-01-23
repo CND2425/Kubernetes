@@ -1,0 +1,40 @@
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+  namespace: ecommerce-app
+spec:
+  selector:
+    app: product-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+  namespace: ecommerce-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      containers:
+      - name: product-service
+        image: ghcr.io/cnd2425/product-service:latest
+        env:
+          - name: MONGODB_URL
+            value: "mongodb+srv://test:test@ecommerce.fgvr9.mongodb.net/store?retryWrites=true&w=majority&appName=ecommerce"
+        ports:
+        - containerPort: 8080
